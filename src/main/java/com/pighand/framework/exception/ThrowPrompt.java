@@ -1,8 +1,7 @@
 package com.pighand.framework.exception;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 提示

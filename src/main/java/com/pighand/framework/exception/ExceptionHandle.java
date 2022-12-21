@@ -3,13 +3,12 @@ package com.pighand.framework.exception;
 import com.pighand.framework.PighandFrameworkConfig;
 import com.pighand.framework.response.Result;
 import com.pighand.framework.util.VerifyUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 异常处理

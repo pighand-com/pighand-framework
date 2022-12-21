@@ -1,6 +1,6 @@
 package com.pighand.framework.response;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * controller 返回结果

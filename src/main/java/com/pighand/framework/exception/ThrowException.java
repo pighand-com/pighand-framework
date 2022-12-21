@@ -1,6 +1,6 @@
 package com.pighand.framework.exception;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 异常
