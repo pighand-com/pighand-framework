@@ -24,13 +24,18 @@ jobs:
         java-version: 17
         distribution: 'adopt'
         server-id: sonatype
-        server-username: ${{ secrets.MAVEN_SONATYPE_USERNAME }}
-        server-password: ${{ secrets.MAVEN_SONATYPE_PASSWORD }}
-        gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSWORD }}
-        gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+        server-username: MAVEN_SONATYPE_USERNAME
+        server-password: MAVEN_SONATYPE_PASSWORD
+        gpg-passphrase: MAVEN_GPG_PASSWORD
+        gpg-private-key: MAVEN_GPG_PRIVATE_KEY
         
     - name: Publish to Maven Central
       run: mvn clean deploy
+      env:
+        MAVEN_SONATYPE_USERNAME: ${{ secrets.MAVEN_SONATYPE_USERNAME }}
+        MAVEN_SONATYPE_PASSWORD: ${{ secrets.MAVEN_SONATYPE_PASSWORD }}
+        MAVEN_GPG_PASSWORD: ${{ secrets.MAVEN_GPG_PASSWORD }}
+        MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         
     - name: Release on nexus
       uses: monkeyWie/maven-nexus-release@v1.0.0
