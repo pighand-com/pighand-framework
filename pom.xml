@@ -12,9 +12,9 @@
     <description>基于Spring Boot的快速开发框架</description>
 
     <scm>
-        <url>https://github.com/pighand-com/pighand-framework</url>
-        <connection>scm:git:https://github.com/pighand-com/pighand-spring-framework.git</connection>
-        <developerConnection>scm:git:https://github.com/pighand-com/pighand-spring-framework</developerConnection>
+        <url>https://github.com/pighand-com/pighand-framework-spring</url>
+        <connection>scm:git:hhttps://github.com/pighand-com/pighand-framework-spring.git</connection>
+        <developerConnection>scm:git:https://github.com/pighand-com/pighand-framework-spring</developerConnection>
     </scm>
 
     <licenses>
@@ -219,12 +219,12 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <configuration>
-                            <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration>
+                        <!--                        <configuration>-->
+                        <!--                            <gpgArguments>-->
+                        <!--                                <arg>&#45;&#45;pinentry-mode</arg>-->
+                        <!--                                <arg>loopback</arg>-->
+                        <!--                            </gpgArguments>-->
+                        <!--                        </configuration>-->
                     </plugin>
                 </plugins>
             </build>
