@@ -10,11 +10,12 @@
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>基于Spring Boot的快速开发框架</description>
+    <url>https://github.com/pighand-com/pighand-framework-spring</url>
 
     <scm>
         <url>https://github.com/pighand-com/pighand-framework-spring</url>
-        <connection>scm:git:https://github.com/pighand-com/pighand-framework-spring.git</connection>
-        <developerConnection>scm:git:https://github.com/pighand-com/pighand-framework-spring</developerConnection>
+        <connection>https://github.com/pighand-com/pighand-framework-spring.git</connection>
+        <developerConnection>https://github.com/pighand-com/pighand-framework-spring</developerConnection>
     </scm>
 
     <licenses>
