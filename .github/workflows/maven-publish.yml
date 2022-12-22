@@ -26,8 +26,6 @@ jobs:
         server-id: sonatype
         server-username: MAVEN_SONATYPE_USERNAME
         server-password: MAVEN_SONATYPE_PASSWORD
-        gpg-passphrase: MAVEN_GPG_PASSWORD
-        gpg-private-key: MAVEN_GPG_PRIVATE_KEY
         
     - name: Publish to Maven Central
       run: mvn clean deploy
