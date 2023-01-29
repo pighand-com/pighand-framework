@@ -1,9 +1,9 @@
-package com.pighand.spring.page;
+package com.pighand.framework.spring.page;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.pighand.spring.PighandFrameworkConfig;
+import com.pighand.framework.spring.PighandFrameworkConfig;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;

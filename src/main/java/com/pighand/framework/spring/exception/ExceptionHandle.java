@@ -1,8 +1,8 @@
-package com.pighand.spring.exception;
+package com.pighand.framework.spring.exception;
 
-import com.pighand.spring.PighandFrameworkConfig;
-import com.pighand.spring.response.Result;
-import com.pighand.spring.util.VerifyUtils;
+import com.pighand.framework.spring.PighandFrameworkConfig;
+import com.pighand.framework.spring.response.Result;
+import com.pighand.framework.spring.util.VerifyUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

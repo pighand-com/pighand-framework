@@ -1,4 +1,4 @@
-package com.pighand.spring.base;
+package com.pighand.framework.spring.base;
 
 /**
  * mapper 基础父类

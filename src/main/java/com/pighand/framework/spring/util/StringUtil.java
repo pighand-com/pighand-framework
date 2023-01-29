@@ -1,4 +1,4 @@
-package com.pighand.spring.util;
+package com.pighand.framework.spring.util;
 
 /**
  * 字符串工具

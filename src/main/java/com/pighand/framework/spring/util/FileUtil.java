@@ -1,6 +1,6 @@
-package com.pighand.spring.util;
+package com.pighand.framework.spring.util;
 
-import com.pighand.spring.exception.ThrowException;
+import com.pighand.framework.spring.exception.ThrowException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;

@@ -1,4 +1,4 @@
-package com.pighand.spring.util;
+package com.pighand.framework.spring.util;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

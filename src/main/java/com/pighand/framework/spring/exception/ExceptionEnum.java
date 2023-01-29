@@ -1,4 +1,4 @@
-package com.pighand.spring.exception;
+package com.pighand.framework.spring.exception;
 
 /**
  * 集成运行时异常类型

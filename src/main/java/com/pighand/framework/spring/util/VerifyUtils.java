@@ -1,4 +1,4 @@
-package com.pighand.spring.util;
+package com.pighand.framework.spring.util;
 
 import java.lang.reflect.Array;
 import java.util.Collection;

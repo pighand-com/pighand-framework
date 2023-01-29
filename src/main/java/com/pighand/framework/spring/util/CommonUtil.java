@@ -1,4 +1,4 @@
-package com.pighand.spring.util;
+package com.pighand.framework.spring.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 

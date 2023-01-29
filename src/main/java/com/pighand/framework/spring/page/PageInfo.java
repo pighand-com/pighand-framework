@@ -1,4 +1,4 @@
-package com.pighand.spring.page;
+package com.pighand.framework.spring.page;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

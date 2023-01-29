@@ -1,4 +1,4 @@
-package com.pighand.spring.response;
+package com.pighand.framework.spring.response;
 
 import lombok.Data;
 

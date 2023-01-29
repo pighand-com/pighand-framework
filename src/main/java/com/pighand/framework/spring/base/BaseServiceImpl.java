@@ -1,4 +1,4 @@
-package com.pighand.spring.base;
+package com.pighand.framework.spring.base;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

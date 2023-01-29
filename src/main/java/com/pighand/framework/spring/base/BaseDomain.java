@@ -1,9 +1,9 @@
-package com.pighand.spring.base;
+package com.pighand.framework.spring.base;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.pighand.spring.page.PageOrList;
-import com.pighand.spring.page.PageType;
+import com.pighand.framework.spring.page.PageOrList;
+import com.pighand.framework.spring.page.PageType;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;

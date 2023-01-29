@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pighand.spring.page.interceptor;
+package com.pighand.framework.spring.page.interceptor;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.dialects.IDialect;
-import com.pighand.spring.page.PageOrList;
-import com.pighand.spring.page.PageType;
+import com.pighand.framework.spring.page.PageOrList;
+import com.pighand.framework.spring.page.PageType;
 import lombok.NoArgsConstructor;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Alias;

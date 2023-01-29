@@ -1,4 +1,4 @@
-package com.pighand.spring;
+package com.pighand.framework.spring;
 
 import lombok.Data;
 import lombok.Getter;

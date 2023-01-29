@@ -1,4 +1,4 @@
-package com.pighand.spring.exception;
+package com.pighand.framework.spring.exception;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;

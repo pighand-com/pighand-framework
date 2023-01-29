@@ -1,4 +1,4 @@
-package com.pighand.spring.util;
+package com.pighand.framework.spring.util;
 
 import javax.swing.*;
 import java.awt.*;
