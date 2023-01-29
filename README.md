@@ -2,6 +2,34 @@
 
 基于spring boot、mybatis、mybatis-plus。快速开发框架。即插即用，无代码入侵，简化开发流程，帮助developer快速、规范开发。
 
+<!-- TOC -->
+
+* [pighand-framework-spring](#pighand-framework-spring)
+    * [快速开始](#快速开始)
+        * [安装](#安装)
+            * [MAVEN](#maven)
+            * [GRADLE](#gradle)
+            * [parent](#parent)
+        * [配置](#配置)
+    * [restful api支持](#restful-api支持)
+    * [分页](#分页)
+        * [page模式](#page模式)
+        * [page_token模式（推荐，前提是表中存在有序、有索引的字段）](#pagetoken模式推荐前提是表中存在有序有索引的字段)
+        * [BaseDomain](#basedomain)
+        * [PageOrList](#pageorlist)
+    * [异常处理](#异常处理)
+        * [异常](#异常)
+            * [配置（非必须）](#配置非必须)
+            * [使用](#使用)
+        * [提示](#提示)
+            * [使用](#使用-1)
+    * [ResultData（格式化返回值）](#resultdata格式化返回值)
+        * [返回成功](#返回成功)
+        * [返回提示](#返回提示)
+        * [返回异常](#返回异常)
+
+<!-- TOC -->
+
 ### 快速开始
 
 #### 安装
