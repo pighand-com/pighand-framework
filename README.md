@@ -1,39 +1,6 @@
-# pighand-framework
+# pighand-framework-spring
 
-快速开发框架。即插即用，无代码入侵，简化开发流程，帮助developer快速、规范开发。
-
-**v1.0.0:**\
-基于spring boot、mybatis、mybatis-plus。
-
-<!-- TOC -->
-
-* [pighand-framework](#pighand-framework)
-    * [快速开始](#)
-        * [安装](#)
-            * [MAVEN](#maven)
-            * [GRADLE](#gradle)
-            * [parent](#parent)
-        * [配置](#)
-    * [注解](#)
-        * [@RestController](#restcontroller)
-        * [@Get、@Put、@Post、@Delete、@Patch](#getputpostdeletepatch)
-    * [分页](#)
-        * [page模式](#page)
-        * [page_token模式（推荐，前提是表中存在有序、有索引的字段）](#page_token)
-        * [BaseDomain](#basedomain)
-        * [PageOrList](#pageorlist)
-    * [异常处理](#)
-        * [异常](#)
-            * [配置（非必须）](#)
-            * [使用](#)
-        * [提示](#)
-            * [使用](#)
-    * [ResultData（格式化返回值）](#resultdata)
-        * [返回成功](#)
-        * [返回提示](#)
-        * [返回异常](#)
-
-<!-- TOC -->
+基于spring boot、mybatis、mybatis-plus。快速开发框架。即插即用，无代码入侵，简化开发流程，帮助developer快速、规范开发。
 
 ### 快速开始
 
@@ -45,8 +12,8 @@
 <dependencies>
     <dependency>
     	<groupId>com.pighand</groupId>
-    	<artifactId>pighand-framework</artifactId>
-    	<version>1.0.0</version>
+    	<artifactId>pighand-framework-spring</artifactId>
+    	<version>1.1.0</version>
     </dependency>
 </dependencies>
 ```
@@ -55,20 +22,20 @@
 
 ```
 dependencies {
-        compile 'com.pighand:pighand-framework:1.0.0'
+        compile 'com.pighand:pighand-framework-spring:1.1.0'
 }
 ```
 
 ##### parent
 
-使用[pighand-framework](https://github.com/pighand-com/pighand-framework-parent)，不需要引用spring
+使用[pighand-framework-spring-parent](https://github.com/pighand-com/pighand-framework-spring-parent)，不需要引用spring
 boot、pighand-framework。
 
 ```
 <parent>
     <groupId>com.pighand</groupId>
-    <artifactId>pighand-framework-parent</artifactId>
-    <version>1.0.0</version>
+    <artifactId>pighand-framework-spring-parent</artifactId>
+    <version>1.1.0</version>
 </parent>
 ```
 
@@ -92,49 +59,9 @@ boot、pighand-framework。
 6. mapper继承（非必须）\
    `BaseMapper`
 
-### 注解
+### restful api支持
 
-#### @RestController
-
-合并@RequestMapping、@RestController、@Tag(springdoc)
-
-| 属性              | 类型                    | 描述                   |
-|-----------------|-----------------------|----------------------|
-| path            | String[]              | RestController.path  |
-| value           | String[]              | RestController.value |
-| docName         | String                | Tag.name             |
-| docDescription  | String                | Tag.description      |
-| docExternalDocs | ExternalDocumentation | Tag.externalDocs     |
-| docExtensions   | Extension[]           | Tag.extensions       |
-
-#### @Get、@Put、@Post、@Delete、@Patch
-
-合并@DocOperation、@RequestMapping
-
-| 属性                | 类型                    | 描述                          |
-|-------------------|-----------------------|-----------------------------|
-| name              | String                | RequestMapping.name         |
-| value             | String[]              | RequestMapping.value        |
-| path              | String[]              | RequestMapping.path         |
-| params            | String[]              | RequestMapping.params       |
-| headers           | String[]              | RequestMapping.headers      |
-| consumes          | String[]              | RequestMapping.consumes     |
-| produces          | String[]              | RequestMapping.produces     |
-| docMethod         | String                | DocOperation.method         |
-| docTags           | String[]              | DocOperation.tags           |
-| docSummary        | String                | DocOperation.summary        |
-| docDescription    | String                | DocOperation.description    |
-| docRequestBody    | RequestBody           | DocOperation.requestBody    |
-| docExternalDocs   | ExternalDocumentation | DocOperation.externalDocs   |
-| docOperationId    | String                | DocOperation.operationId    |
-| docParameters     | Parameter[]           | DocOperation.parameters     |
-| docResponses      | ApiResponse[]         | DocOperation.responses      |
-| docDeprecated     | boolean               | DocOperation.deprecated     |
-| docSecurity       | SecurityRequirement[] | DocOperation.security       |
-| docServers        | Server[]              | DocOperation.servers        |
-| docExtensions     | Extension[]           | DocOperation.extensions     |
-| docHidden         | boolean               | DocOperation.hidden         |
-| docIgnoreJsonView | boolean               | DocOperation.ignoreJsonView |
+[pighand-framework-spring-api](https://github.com/pighand-com/pighand-framework-spring-api)
 
 ### 分页
 
