@@ -5,7 +5,10 @@ import com.pighand.framework.spring.response.Result;
 import com.pighand.framework.spring.util.VerifyUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,8 +28,26 @@ public class ExceptionHandle {
             HttpServletRequest request, HttpServletResponse response, Exception ex) {
         this.privateErrorStack(null, ex.getMessage(), ex.getStackTrace(), ExceptionEnum.EXCEPTION);
 
-        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        return ex.getMessage();
+        if (ex instanceof MethodArgumentNotValidException) {
+            // 处理@Validated异常
+            MethodArgumentNotValidException validException = (MethodArgumentNotValidException) ex;
+            FieldError fieldError = validException.getFieldError();
+
+            String validMessage = fieldError.getField() + " " + fieldError.getDefaultMessage();
+
+            return getExceptionResult(
+                    new ThrowPrompt(validMessage), ExceptionEnum.PROMPT, response);
+        } else if (ex instanceof ConstraintViolationException) {
+            // url参数、数组类参数校验报错类
+            ConstraintViolationException validException = (ConstraintViolationException) ex;
+
+            return getExceptionResult(
+                    new ThrowPrompt(validException.getMessage()), ExceptionEnum.PROMPT, response);
+        } else {
+            // 其他系统异常，直接返回
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return ex.getMessage();
+        }
     }
 
     /**
