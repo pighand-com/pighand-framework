@@ -46,6 +46,7 @@
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
         <jackson-annotations.version>2.14.1</jackson-annotations.version>
+        <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
         <spring-boot-configuration-processor.version>3.0.1</spring-boot-configuration-processor.version>
 
         <!-- plugins -->
@@ -106,6 +107,11 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <version>${jackson-annotations.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta.validation-api.version}</version>
         </dependency>
     </dependencies>
 
