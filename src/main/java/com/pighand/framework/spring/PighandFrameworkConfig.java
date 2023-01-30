@@ -27,6 +27,9 @@ public class PighandFrameworkConfig {
 
     @Data
     public static class ExceptionConfig {
+        /** 是否拦截Exception */
+        private boolean interceptException = false;
+
         /** 自定义错误信息 */
         private String message;
 

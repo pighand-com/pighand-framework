@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,8 +27,6 @@ public class ExceptionHandle {
     @ResponseBody
     public Object javaException(
             HttpServletRequest request, HttpServletResponse response, Exception ex) {
-        this.privateErrorStack(null, ex.getMessage(), ex.getStackTrace(), ExceptionEnum.EXCEPTION);
-
         if (ex instanceof MethodArgumentNotValidException) {
             // 处理@Validated异常
             MethodArgumentNotValidException validException = (MethodArgumentNotValidException) ex;
@@ -43,8 +42,24 @@ public class ExceptionHandle {
 
             return getExceptionResult(
                     new ThrowPrompt(validException.getMessage()), ExceptionEnum.PROMPT, response);
+        } else if (PighandFrameworkConfig.exception.isInterceptException()) {
+            // 拦截系统异常
+            this.privateErrorStack(
+                    null, ex.getMessage(), ex.getStackTrace(), ExceptionEnum.EXCEPTION);
+
+            String overallErrorMessage = PighandFrameworkConfig.exception.getMessage();
+            String message =
+                    StringUtils.hasText(overallErrorMessage)
+                            ? overallErrorMessage
+                            : ex.getMessage();
+
+            return getExceptionResult(
+                    new ThrowException(message), ExceptionEnum.EXCEPTION, response);
         } else {
             // 其他系统异常，直接返回
+            this.privateErrorStack(
+                    null, ex.getMessage(), ex.getStackTrace(), ExceptionEnum.EXCEPTION);
+
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return ex.getMessage();
         }

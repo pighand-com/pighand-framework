@@ -185,6 +185,7 @@ bean继承BaseDomain，bean作为controller接收参数，可直接获取分页�
 ```
 pighand:
   exception:
+    intercept-exception: false   #拦截Exception
     message: ""   #自定义错误信息，使用throwException时，接口返回的信息始终是在此设置的信息
     responseOk: true     #抛出异常，http状态始终是200
     promptStack: false   #使用throwPrompt时，是否输入日志
