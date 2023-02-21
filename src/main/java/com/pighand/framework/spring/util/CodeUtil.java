@@ -56,10 +56,8 @@ public class CodeUtil {
             case CAPITAL:
                 codeList = CAPITAL_LIST;
                 break;
-            case NUMBER_LETTER:
-                codeList = ALL;
-                break;
             default:
+                codeList = ALL;
                 break;
         }
         StringBuffer str = new StringBuffer();
@@ -67,7 +65,16 @@ public class CodeUtil {
             int idx = (int) (Math.random() * codeList.length);
             str.append(codeList[idx]);
         }
-        return str.toString();
+
+        String code = str.toString();
+
+        if (type.equals(CodeType.NUMBER_LOWERCASE_LETTER)) {
+            code = code.toLowerCase();
+        } else if (type.equals(CodeType.NUMBER_CAPITAL_LETTER)) {
+            code = code.toUpperCase();
+        }
+
+        return code;
     }
 
     /**
