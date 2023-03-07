@@ -15,6 +15,8 @@ public class Result<T> extends ResultData<T> {
 
     public Result() {
         super();
+
+        super.setResultData(this.successCode, null, null);
     }
 
     public Result(String code, T data, String error) {
