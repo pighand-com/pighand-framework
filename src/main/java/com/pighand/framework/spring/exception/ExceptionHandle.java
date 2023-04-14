@@ -13,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 /**
  * 异常处理
@@ -48,10 +49,16 @@ public class ExceptionHandle {
                     null, ex.getMessage(), ex.getStackTrace(), ExceptionEnum.EXCEPTION);
 
             String overallErrorMessage = PighandFrameworkConfig.exception.getMessage();
+            String exMessage = ex.getMessage();
+
+            if (ex instanceof WebClientResponseException) {
+                exMessage += ", body: " + ((WebClientResponseException.BadRequest)ex).getResponseBodyAsString();
+            }
+
             String message =
                     StringUtils.hasText(overallErrorMessage)
                             ? overallErrorMessage
-                            : ex.getMessage();
+                            : exMessage;
 
             return getExceptionResult(
                     new ThrowException(message), ExceptionEnum.EXCEPTION, response);
