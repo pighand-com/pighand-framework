@@ -7,4 +7,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  *
  * @author wangshuli
  */
-public interface BaseService<T extends BaseDomain> extends IService<T> {}
+public interface BaseService<T extends BaseDomain> extends IService<T> {
+
+    /**
+     * 根据id查询详情，如果不存在则抛出异常
+     *
+     * @param id
+     * @return T
+     */
+    T getByIdWithException(java.io.Serializable id);
+}
