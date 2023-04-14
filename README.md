@@ -262,3 +262,13 @@ new Result().prompt(error);
 #### 返回异常
 
 new Result().exception(error);
+
+### @HttpExchange注册器
+
+在Application中使用`@Import({HttpExchangeRegister.class})`注解，可以自动注册HttpExchange。
+
+<b>*</b> 代码中注入类，需要使用一下方式注入：
+
+1. @Autowired(required = false)
+2. @Resource
+3. 构造方法注入
