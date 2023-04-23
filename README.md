@@ -23,10 +23,15 @@
             * [使用](#使用)
         * [提示](#提示)
             * [使用](#使用-1)
-    * [ResultData（格式化返回值）](#resultdata格式化返回值)
-        * [返回成功](#返回成功)
-        * [返回提示](#返回提示)
-        * [返回异常](#返回异常)
+    * [Result（格式化返回值）](#result格式化返回值)
+        * [HTTP Result](#http-result)
+            * [返回成功](#返回成功)
+            * [返回提示](#返回提示)
+            * [返回异常](#返回异常)
+        * [GRPC Result（格式化返回值）](#grpc-result格式化返回值)
+    * [@HttpExchange注册器](#httpexchange注册器)
+    * [工具类](#工具类)
+        * [校验工具类 VerifyUtils](#校验工具类-verifyUtils)
 
 <!-- TOC -->
 
@@ -229,15 +234,17 @@ throw new throwPrompt(errorMessage, data);\
 throw new throwPrompt(errorMessage, code);\
 throw new throwPrompt(errorMessage, code, data);
 
-### ResultData（格式化返回值）
+### Result（格式化返回值）
+
+#### HTTP Result
 
 使用：\
 方法体返回值，推荐带泛型，swagger可以根据泛型自动生成返回值信息
 
 ```
-public ResultData<PageOrList<VO>> page(VO vo) {
+public Result<PageOrList<VO>> page(VO vo) {
    PageOrList result = service.query(vo);
-   return new ResultData<>(result);
+   return new Result<>(result);
 }
 
 response:
@@ -248,20 +255,47 @@ response:
 }
 ```
 
-#### 返回成功
+##### 返回成功
 
 new Result();\
 new Result(returnObject);\
 new Result().success();\
 new Result().success(returnObject); # 返回成功信息\
 
-#### 返回提示
+##### 返回提示
 
 new Result().prompt(error);
 
-#### 返回异常
+##### 返回异常
 
 new Result().exception(error);
+
+#### GRPC Result（格式化返回值）
+
+```java
+@Component public class XxxService extends XxxServiceGrpc.XxxServiceImplBase {
+
+    @Override public void content(ContentRequest request, StreamObserver<XxxResponse> responseObserver) {
+        new GrpcResult<>(responseObserver, XxxResponse.newBuilder(),
+            // service
+            () -> {
+                // do something
+            },
+
+            // service running success
+            (responseBuilder, result, code) -> {
+                responseBuilder.setCode(code);
+                responseBuilder.setData(result);
+            },
+
+            // exception
+            (responseBuilder, result, code, message) -> {
+                responseBuilder.setCode(code);
+                responseBuilder.setError(message);
+            });
+    }
+}
+```
 
 ### @HttpExchange注册器
 
@@ -272,3 +306,13 @@ new Result().exception(error);
 1. @Autowired(required = false)
 2. @Resource
 3. 构造方法注入
+
+### 工具类
+
+#### 校验工具类 - VerifyUtils
+
+- isEmpty(Object): 判断对象是否为空 对象为null，字符序列长度为0，集合类、Map为empty
+- isIp4(String): 判断是否是IPv4
+- verifyMail(String): 判断对象是邮箱
+- validateParams(Object): hibernate校验，校验失败抛出异常
+- validateParams(Object, ...group): hibernate分组校验，校验失败抛出异常

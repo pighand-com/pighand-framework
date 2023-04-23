@@ -10,7 +10,7 @@ public interface ThrowInterface {
      *
      * @return
      */
-    String getCode();
+    Integer getCode();
 
     /**
      * response data

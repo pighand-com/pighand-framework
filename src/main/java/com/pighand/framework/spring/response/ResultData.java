@@ -11,7 +11,7 @@ import lombok.Data;
 public class ResultData<T> {
 
     /** 状态码 */
-    private String code;
+    private Integer code;
 
     /** 返回数据 */
     private T data;
@@ -21,11 +21,11 @@ public class ResultData<T> {
 
     public ResultData() {}
 
-    public ResultData(String code, T data, String error) {
+    public ResultData(Integer code, T data, String error) {
         this.setResultData(code, data, error);
     }
 
-    public ResultData<T> setResultData(String code, T data, String error) {
+    public ResultData<T> setResultData(Integer code, T data, String error) {
         this.code = code;
         this.data = data;
         this.error = error;

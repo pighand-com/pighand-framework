@@ -15,13 +15,11 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public class ThrowException extends RuntimeException implements ThrowInterface {
 
-    /** 状态码默认500 */
-    private String code = String.valueOf(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-
-    private Object data;
-
     /** 异常消息 */
-    private String error;
+    private final String error;
+    /** 状态码默认500 */
+    private Integer code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+    private Object data;
 
     public ThrowException(String error) {
         super(error);
@@ -40,7 +38,7 @@ public class ThrowException extends RuntimeException implements ThrowInterface {
      * @param error
      * @param code
      */
-    public ThrowException(String error, String code) {
+    public ThrowException(String error, Integer code) {
         super(error);
 
         this.error = error;
@@ -51,39 +49,16 @@ public class ThrowException extends RuntimeException implements ThrowInterface {
      * @param error
      * @param code
      */
-    public ThrowException(String error, String code, Object data) {
+    public ThrowException(String error, Integer code, Object data) {
         super(error);
 
         this.error = error;
         this.code = code;
         this.data = data;
-    }
-
-    /**
-     * @param error
-     * @param code
-     */
-    public ThrowException(String error, int code, Object data) {
-        super(error);
-
-        this.error = error;
-        this.code = String.valueOf(code);
-        this.data = data;
-    }
-
-    /**
-     * @param error
-     * @param code
-     */
-    public ThrowException(String error, int code) {
-        super(error);
-
-        this.error = error;
-        this.code = String.valueOf(code);
     }
 
     @Override
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 

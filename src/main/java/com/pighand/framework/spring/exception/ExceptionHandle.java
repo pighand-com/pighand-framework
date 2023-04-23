@@ -3,10 +3,13 @@ package com.pighand.framework.spring.exception;
 import com.pighand.framework.spring.PighandFrameworkConfig;
 import com.pighand.framework.spring.response.Result;
 import com.pighand.framework.spring.util.VerifyUtils;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolationException;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.util.StringUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -52,13 +55,14 @@ public class ExceptionHandle {
             String exMessage = ex.getMessage();
 
             if (ex instanceof WebClientResponseException) {
-                exMessage += ", body: " + ((WebClientResponseException.BadRequest)ex).getResponseBodyAsString();
+                exMessage +=
+                        ", body: "
+                                + ((WebClientResponseException.BadRequest) ex)
+                                        .getResponseBodyAsString();
             }
 
             String message =
-                    StringUtils.hasText(overallErrorMessage)
-                            ? overallErrorMessage
-                            : exMessage;
+                    StringUtils.hasText(overallErrorMessage) ? overallErrorMessage : exMessage;
 
             return getExceptionResult(
                     new ThrowException(message), ExceptionEnum.EXCEPTION, response);
@@ -85,7 +89,7 @@ public class ExceptionHandle {
         ThrowInterface throwInfo = (ThrowInterface) ex;
 
         String error = throwInfo.getError();
-        String code = throwInfo.getCode();
+        Integer code = throwInfo.getCode();
         Object data = throwInfo.getData();
 
         // 处理空指针
@@ -117,7 +121,7 @@ public class ExceptionHandle {
         }
 
         // 设置HTTP状态码
-        int httpStatus = true ? HttpServletResponse.SC_OK : defaultHttpStatus;
+        int httpStatus = HttpServletResponse.SC_OK;
         response.setStatus(httpStatus);
 
         // 日志
@@ -165,7 +169,7 @@ public class ExceptionHandle {
      * @param stacks exception stacks
      */
     private void privateErrorStack(
-            String code, String message, StackTraceElement[] stacks, ExceptionEnum exceptionEnum) {
+            Integer code, String message, StackTraceElement[] stacks, ExceptionEnum exceptionEnum) {
         StringBuilder exMsg = new StringBuilder();
 
         if (VerifyUtils.isNotEmpty(code)) {

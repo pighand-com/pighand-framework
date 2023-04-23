@@ -1,6 +1,7 @@
 package com.pighand.framework.spring.exception;
 
 import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.Data;
 
 /**
@@ -14,7 +15,7 @@ import lombok.Data;
 public class ThrowPrompt extends RuntimeException implements ThrowInterface {
 
     /** 状态码 默认400 */
-    private String code = String.valueOf(HttpServletResponse.SC_BAD_REQUEST);
+    private Integer code = HttpServletResponse.SC_BAD_REQUEST;
     /** 返回数据 */
     private Object data;
 
@@ -38,7 +39,7 @@ public class ThrowPrompt extends RuntimeException implements ThrowInterface {
      * @param error
      * @param code
      */
-    public ThrowPrompt(String error, String code) {
+    public ThrowPrompt(String error, Integer code) {
         super(error);
 
         this.error = error;
@@ -49,39 +50,16 @@ public class ThrowPrompt extends RuntimeException implements ThrowInterface {
      * @param error
      * @param code
      */
-    public ThrowPrompt(String error, String code, Object data) {
+    public ThrowPrompt(String error, Integer code, Object data) {
         super(error);
 
         this.error = error;
         this.code = code;
         this.data = data;
-    }
-
-    /**
-     * @param error
-     * @param code
-     */
-    public ThrowPrompt(String error, int code, Object data) {
-        super(error);
-
-        this.error = error;
-        this.code = String.valueOf(code);
-        this.data = data;
-    }
-
-    /**
-     * @param error
-     * @param code
-     */
-    public ThrowPrompt(String error, int code) {
-        super(error);
-
-        this.error = error;
-        this.code = String.valueOf(code);
     }
 
     @Override
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 

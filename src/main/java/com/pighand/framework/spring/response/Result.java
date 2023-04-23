@@ -9,9 +9,9 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public class Result<T> extends ResultData<T> {
 
-    private String successCode = String.valueOf(HttpServletResponse.SC_OK);
-    private String promptCode = String.valueOf(HttpServletResponse.SC_BAD_REQUEST);
-    private String exceptionCode = String.valueOf(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    private final Integer successCode = HttpServletResponse.SC_OK;
+    private final Integer promptCode = HttpServletResponse.SC_BAD_REQUEST;
+    private final Integer exceptionCode = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 
     public Result() {
         super();
@@ -19,7 +19,7 @@ public class Result<T> extends ResultData<T> {
         super.setResultData(this.successCode, null, null);
     }
 
-    public Result(String code, T data, String error) {
+    public Result(Integer code, T data, String error) {
         super.setResultData(code, data, error);
     }
 
@@ -51,7 +51,7 @@ public class Result<T> extends ResultData<T> {
      * @param code custom code
      * @return success object
      */
-    public Result<T> success(T returnObj, String code) {
+    public Result<T> success(T returnObj, Integer code) {
         super.setResultData(code, returnObj, null);
         return this;
     }
@@ -86,7 +86,7 @@ public class Result<T> extends ResultData<T> {
      * @param code
      * @return
      */
-    public Result prompt(String message, String code) {
+    public Result prompt(String message, Integer code) {
         super.setResultData(code, null, message);
         return this;
     }
@@ -99,7 +99,7 @@ public class Result<T> extends ResultData<T> {
      * @param data
      * @return
      */
-    public Result<T> prompt(String message, String code, T data) {
+    public Result<T> prompt(String message, Integer code, T data) {
         super.setResultData(code, data, message);
         return this;
     }
@@ -134,7 +134,7 @@ public class Result<T> extends ResultData<T> {
      * @param code
      * @return
      */
-    public Result exception(String message, String code) {
+    public Result exception(String message, Integer code) {
         super.setResultData(code, null, message);
         return this;
     }
@@ -147,7 +147,7 @@ public class Result<T> extends ResultData<T> {
      * @param data
      * @return
      */
-    public Result<T> exception(String message, String code, T data) {
+    public Result<T> exception(String message, Integer code, T data) {
         super.setResultData(code, data, message);
         return this;
     }

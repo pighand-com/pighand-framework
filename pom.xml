@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pighand</groupId>
     <artifactId>pighand-framework-spring</artifactId>
-    <version>1.1.4</version>
+    <version>1.2.0</version>
 
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
@@ -39,16 +39,18 @@
         <jdk.version>17</jdk.version>
 
         <!-- dependencies -->
-        <lombok.version>1.18.24</lombok.version>
+        <spring.version>6.0.6</spring.version>
+        <lombok.version>1.18.26</lombok.version>
         <sl4j-api.version>2.0.6</sl4j-api.version>
-        <spring.version>6.0.3</spring.version>
-        <spring-boot.version>3.0.1</spring-boot.version>
+        <grpc-stub.version>1.54.0</grpc-stub.version>
+        <spring-boot.version>3.0.4</spring-boot.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
+        <protobuf-java.version>3.22.2</protobuf-java.version>
         <reactor-netty-http.version>1.1.5</reactor-netty-http.version>
         <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
-        <jackson-annotations.version>2.14.1</jackson-annotations.version>
+        <jackson-annotations.version>2.14.2</jackson-annotations.version>
         <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
-        <spring-boot-configuration-processor.version>3.0.1</spring-boot-configuration-processor.version>
+        <spring-boot-configuration-processor.version>3.0.4</spring-boot-configuration-processor.version>
 
         <!-- plugins -->
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
@@ -89,14 +91,14 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
             <version>${spring-boot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -128,7 +130,16 @@
             <groupId>io.projectreactor.netty</groupId>
             <artifactId>reactor-netty-http</artifactId>
             <version>${reactor-netty-http.version}</version>
-            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${protobuf-java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <version>${grpc-stub.version}</version>
         </dependency>
     </dependencies>
 
