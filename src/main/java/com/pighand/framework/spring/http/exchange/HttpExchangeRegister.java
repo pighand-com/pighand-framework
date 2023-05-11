@@ -6,6 +6,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -41,9 +42,7 @@ public class HttpExchangeRegister
                 (ConfigurableListableBeanFactory)
                         applicationContext.getAutowireCapableBeanFactory();
 
-        String[] beanNames =
-                beanFactory.getBeanNamesForAnnotation(
-                        org.springframework.boot.autoconfigure.SpringBootApplication.class);
+        String[] beanNames = beanFactory.getBeanNamesForAnnotation(SpringBootApplication.class);
 
         if (beanNames.length > 0) {
             String beanName = beanNames[0];
