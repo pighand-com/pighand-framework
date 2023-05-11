@@ -18,7 +18,7 @@ import java.util.List;
  * @author wangshuli
  */
 @Data
-@JsonIgnoreProperties({"pageSize", "pageCurrent", "pageToken"})
+@JsonIgnoreProperties({"pageSize", "pageCurrent", "pageToken", "joinTables"})
 public class BaseDomain {
     @TableField(exist = false)
     @Getter(AccessLevel.NONE)
