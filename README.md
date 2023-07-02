@@ -30,8 +30,9 @@
             * [返回异常](#返回异常)
         * [GRPC Result（格式化返回值）](#grpc-result格式化返回值)
     * [@HttpExchange注册器](#httpexchange注册器)
+    * [mysql数据类型转换](#mysql数据类型转换)
     * [工具类](#工具类)
-        * [校验工具类 VerifyUtils](#校验工具类-verifyUtils)
+        * [校验工具类 - VerifyUtils](#校验工具类---verifyutils)
 
 <!-- TOC -->
 
@@ -306,6 +307,22 @@ new Result().exception(error);
 1. @Autowired(required = false)
 2. @Resource
 3. 构造方法注入
+
+### mysql数据类型转换
+
+1. json array to List
+
+```java
+// bean class add
+@TableName(autoResultMap = true)
+
+// file add
+@TableField(typeHandler = ListTypeHandler.class)
+
+// application.yml add
+mybatis-plus:
+    type-handlers-package:com.pighand.framework.spring.type.handler
+```
 
 ### 工具类
 
