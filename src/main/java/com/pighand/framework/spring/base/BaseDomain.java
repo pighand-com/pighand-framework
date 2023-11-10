@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pighand.framework.spring.page.PageOrList;
 import com.pighand.framework.spring.page.PageType;
-
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -34,7 +33,9 @@ public class BaseDomain {
     @TableField(exist = false)
     private Long pageToken;
 
-    /** 查询关联表 */
+    /**
+     * 查询关联表
+     */
     @TableField(exist = false)
     private List<String> joinTables;
 
@@ -76,14 +77,20 @@ public class BaseDomain {
         this.pageSize = pageSize;
 
         this.pageParamOrInit();
-        this.pageParam.setSize(this.pageSize);
+
+        if (this.pageSize != null) {
+            this.pageParam.setSize(this.pageSize);
+        }
     }
 
     public void setPageCurrent(Long pageCurrent) {
         this.pageCurrent = pageCurrent;
 
         this.pageParamOrInit();
-        this.pageParam.setCurrent(this.pageCurrent);
+        
+        if (this.pageCurrent != null) {
+            this.pageParam.setCurrent(this.pageCurrent);
+        }
     }
 
     public void setPageToken(String pageToken) {
