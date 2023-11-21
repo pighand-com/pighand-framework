@@ -19,38 +19,17 @@ import org.springframework.stereotype.Component;
 public class PighandFrameworkConfig {
     public static final String PIGHAND_PREFIX = "pighand";
 
-    /** 异常配置 */
-    @Getter public static ExceptionConfig exception = new ExceptionConfig();
+    /**
+     * 异常配置
+     */
+    @Getter
+    public static ExceptionConfig exception = new ExceptionConfig();
 
-    /** 分页配置 */
-    @Getter public static PageConfig page = new PageConfig();
-
-    @Data
-    public static class ExceptionConfig {
-        /** 是否拦截Exception */
-        private boolean interceptException = false;
-
-        /** 自定义错误信息 */
-        private String message;
-
-        /** response状态是否一直返回200 */
-        private boolean responseOk = true;
-
-        /** prompt是否显示堆栈 */
-        private boolean promptStack = false;
-    }
-
-    @Data
-    public static class PageConfig {
-        /** page_token模式，下页查询列 */
-        private String nextColumn = "id";
-
-        /** page_token模式，加密key */
-        private String secretKey = "0__0PIGHAND_____";
-
-        /** page_token模式，加密算法，默认AES */
-        private String secretAlgorithm = "AES";
-    }
+    /**
+     * 分页配置
+     */
+    @Getter
+    public static PageConfig page = new PageConfig();
 
     public void setException(ExceptionConfig exception) {
         PighandFrameworkConfig.exception = exception;
@@ -58,5 +37,36 @@ public class PighandFrameworkConfig {
 
     public void setPage(PageConfig page) {
         PighandFrameworkConfig.page = page;
+    }
+
+    @Data
+    public static class ExceptionConfig {
+        /**
+         * 是否拦截Exception
+         */
+        private boolean interceptException = false;
+
+        /**
+         * 自定义错误信息
+         */
+        private String message;
+
+        /**
+         * response状态是否一直返回200
+         */
+        private boolean responseOk = true;
+
+        /**
+         * prompt是否显示堆栈
+         */
+        private boolean promptStack = false;
+    }
+
+    @Data
+    public static class PageConfig {
+        /**
+         * page_token模式，下页查询列
+         */
+        private String nextColumn = "id";
     }
 }

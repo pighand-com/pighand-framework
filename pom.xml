@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pighand</groupId>
     <artifactId>pighand-framework-spring</artifactId>
-    <version>1.2.3</version>
+    <version>2.0.0-bate.1.20231121</version>
 
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
@@ -45,7 +45,7 @@
         <sl4j-api.version>2.0.6</sl4j-api.version>
         <grpc-stub.version>1.54.0</grpc-stub.version>
         <spring-boot.version>3.0.4</spring-boot.version>
-        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
+        <mybatis-flex.version>1.7.3</mybatis-flex.version>
         <protobuf-java.version>3.22.2</protobuf-java.version>
         <reactor-netty-http.version>1.1.5</reactor-netty-http.version>
         <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
@@ -112,14 +112,14 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-core</artifactId>
-            <version>${mybatis-plus.version}</version>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-core</artifactId>
+            <version>${mybatis-flex.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-extension</artifactId>
-            <version>${mybatis-plus.version}</version>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-spring</artifactId>
+            <version>${mybatis-flex.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

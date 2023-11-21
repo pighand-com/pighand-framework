@@ -6,6 +6,14 @@ package com.pighand.framework.spring.page;
  * @author wangshuli
  */
 public enum PageType {
+    /**
+     * 根据参数自动识别
+     * <p>如果有nextToken，则为token模式
+     * <p>如果有pageSize，则为page模式
+     * <p>默认list
+     */
+    AUTO,
+
     // 列表
     LIST,
 

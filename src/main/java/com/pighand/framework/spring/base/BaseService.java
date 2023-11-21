@@ -1,6 +1,6 @@
 package com.pighand.framework.spring.base;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.mybatisflex.core.service.IService;
 
 /**
  * service 基础父类
@@ -9,11 +9,4 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BaseService<T extends BaseDomain> extends IService<T> {
 
-    /**
-     * 根据id查询详情，如果不存在则抛出异常
-     *
-     * @param id
-     * @return T
-     */
-    T getByIdWithException(java.io.Serializable id);
 }
