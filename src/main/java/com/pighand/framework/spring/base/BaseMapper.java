@@ -19,15 +19,40 @@ import java.util.List;
  * @author wangshuli
  */
 public interface BaseMapper<T extends BaseDomain> extends com.mybatisflex.core.BaseMapper<T> {
+
     /**
      * 分页查询
      *
      * @param pageInfo
      * @return
-     * @see #page(PageInfo, QueryWrapper)
+     * @see #page(PageInfo, QueryWrapper, Class)
      */
     default PageOrList<T> page(PageInfo pageInfo) {
-        return this.page(pageInfo, null);
+        return this.page(pageInfo, null, null);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param pageInfo
+     * @return
+     * @see #page(PageInfo, QueryWrapper, Class)
+     */
+    default <R> PageOrList<R> page(PageInfo pageInfo, Class<R> r) {
+
+        return this.page(pageInfo, null, null);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param pageInfo
+     * @param queryWrapper
+     * @return
+     * @see #page(PageInfo, QueryWrapper, Class)
+     */
+    default <T> PageOrList<T> page(PageInfo pageInfo, QueryWrapper queryWrapper) {
+        return this.page(pageInfo, queryWrapper, null);
     }
 
     /**
@@ -38,14 +63,15 @@ public interface BaseMapper<T extends BaseDomain> extends com.mybatisflex.core.B
      *
      * @param pageInfo
      * @param queryWrapper
+     * @param asType
      * @return
      */
-    default PageOrList<T> page(PageInfo pageInfo, QueryWrapper queryWrapper) {
+    default <R> PageOrList<R> page(PageInfo pageInfo, QueryWrapper queryWrapper, Class<R> asType) {
         // init page params
         pageInfo.init();
 
-        List<T> records;
-        PageOrList<T> pageOrList;
+        List records;
+        PageOrList pageOrList;
 
         if (queryWrapper == null) {
             queryWrapper = new QueryWrapper();
@@ -55,11 +81,21 @@ public interface BaseMapper<T extends BaseDomain> extends com.mybatisflex.core.B
 
         if (pageType.equals(PageType.LIST)) {
             // query by list
-            records = this.selectListByQuery(queryWrapper);
+            if (asType != null) {
+                records = this.selectListByQueryAs(queryWrapper, asType);
+            } else {
+                records = this.selectListByQuery(queryWrapper);
+            }
             pageOrList = new PageOrList(records);
         } else if (pageType.equals(PageType.PAGE)) {
             // query by paginate
-            Page page = this.paginate(pageInfo.toPage(), queryWrapper);
+
+            Page page;
+            if (asType != null) {
+                page = this.paginateAs(pageInfo.toPage(), queryWrapper, asType);
+            } else {
+                page = this.paginate(pageInfo.toPage(), queryWrapper);
+            }
 
             pageOrList = new PageOrList(page);
         } else if (pageType.equals(PageType.NEXT_TOKEN)) {
@@ -78,9 +114,15 @@ public interface BaseMapper<T extends BaseDomain> extends com.mybatisflex.core.B
             pageInfo.setPageNumber(1L);
             pageInfo.setPageSize(pageInfo.getPageSize() + 1);
             pageInfo.setTotalRow(1L);
-            Page page = this.paginate(pageInfo.toPage(), queryWrapper);
 
-            List<T> pageRecords = page.getRecords();
+            Page page;
+            if (asType != null) {
+                page = this.paginateAs(pageInfo.toPage(), queryWrapper, asType);
+            } else {
+                page = this.paginate(pageInfo.toPage(), queryWrapper);
+            }
+
+            List<?> pageRecords = page.getRecords();
 
             // generate new nextToken
             String newNextToken = null;
