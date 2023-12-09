@@ -41,10 +41,10 @@
         <!-- dependencies -->
         <spring.version>6.0.6</spring.version>
         <lombok.version>1.18.26</lombok.version>
-        <jackson.version>2.14.2</jackson.version>
+        <jackson.version>2.15.1</jackson.version>
         <sl4j-api.version>2.0.6</sl4j-api.version>
         <grpc-stub.version>1.54.0</grpc-stub.version>
-        <spring-boot.version>3.0.4</spring-boot.version>
+        <spring-boot.version>3.1.0</spring-boot.version>
         <mybatis-flex.version>1.7.3</mybatis-flex.version>
         <protobuf-java.version>3.22.2</protobuf-java.version>
         <reactor-netty-http.version>1.1.5</reactor-netty-http.version>
