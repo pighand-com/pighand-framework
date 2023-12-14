@@ -1,6 +1,11 @@
 package com.pighand.framework.spring.page;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.pighand.framework.spring.PighandFrameworkConfig;
+import com.pighand.framework.spring.util.VerifyUtils;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.nio.charset.StandardCharsets;
@@ -11,12 +16,26 @@ import java.util.Optional;
  * next token params
  */
 @Data
+@Builder
+@AllArgsConstructor
 public class NextToken {
+
+    public final static String separator = "::";
+
+    /**
+     * token模式，查询字段的所属表。sql的from中存在多个表或别名，需要传此参数
+     */
+    private String table;
 
     /**
      * token模式，查询字段(有序、有索引字段)
      */
     private String column;
+
+    /**
+     * token模式，查询字段(全字段)。tableName.columnName 或 columnName
+     */
+    private String fullColumn;
 
     /**
      * token模式，查询下页数据的操作符
@@ -32,6 +51,41 @@ public class NextToken {
      * 上次查询的pageSize
      */
     private Long pageSize;
+
+    public NextToken() {
+        this.column = PighandFrameworkConfig.page.getNextColumn();
+        this.operation = NextToken.getOperation(null);
+        this.pageSize = PageInfo.defaultPageSize;
+    }
+
+    /**
+     * 解析nextToken
+     *
+     * @param nextTokenString
+     * @return
+     */
+    public static NextToken decode(String nextTokenString) {
+        String nextTokenDecode = new String(Base64.getDecoder().decode(nextTokenString), StandardCharsets.UTF_8);
+        String[] nextTokenDecodes = nextTokenDecode.split(separator);
+
+        String column = nextTokenDecodes[0];
+        String table = null;
+        if (column.indexOf(".") > 0) {
+            String[] columnDecodes = column.split("\\.");
+            table = columnDecodes[0].trim();
+            column = columnDecodes[1].trim();
+        }
+
+        String fullColumn = VerifyUtils.isNotEmpty(table) ? table + "." + column : column;
+
+        Long pageSize = PageInfo.defaultPageSize;
+        if (nextTokenDecodes.length > 3) {
+            pageSize = Long.parseLong(nextTokenDecodes[3]);
+        }
+
+        return NextToken.builder().table(table).column(column).fullColumn(fullColumn).operation(nextTokenDecodes[1])
+            .value(nextTokenDecodes[2]).pageSize(pageSize).build();
+    }
 
     /**
      * 获取操作符
@@ -56,53 +110,40 @@ public class NextToken {
     }
 
     /**
-     * 解析nextToken
-     *
-     * @param nextTokenString
-     * @return
-     */
-    public static NextToken decode(String nextTokenString) {
-        String nextTokenDecode = new String(Base64.getDecoder().decode(nextTokenString), StandardCharsets.UTF_8);
-        String[] nextTokenDecodes = nextTokenDecode.split("_");
-
-        NextToken nextToken = new NextToken();
-        nextToken.setColumn(nextTokenDecodes[0]);
-        nextToken.setOperation(getOperation(nextTokenDecodes[1]));
-        nextToken.setValue(nextTokenDecodes[2]);
-        return nextToken;
-    }
-
-    /**
      * 编码nextToken
      *
-     * @param value
      * @return
-     * @see #encode(Object, String, String, Long)
+     * @see #encode(Object)
      */
-    public static String encode(Object value) {
-        return encode(value, null, null, null);
+    public String encode() {
+        return this.encode(null);
     }
 
     /**
      * 编码nextToken
      * <p>nextToken结构：column_operation_value_pageSize
      *
-     * @param value     上一页的最后一条数据，用于查询下页数据
-     * @param column    查询字段(有序、有索引字段)
-     * @param operation 查询下页数据的操作符
-     * @param pageSize  上次查询的pageSize
-     * @return
+     * @param includeValueObject 包含value的对象
+     * @return nextToken
      */
-    public static String encode(Object value, String column, String operation, Long pageSize) {
-        if (column == null) {
-            column = PighandFrameworkConfig.page.getNextColumn();
+    public String encode(Object includeValueObject) {
+        if (includeValueObject != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode node = objectMapper.valueToTree(includeValueObject);
+            this.value = node.get(PighandFrameworkConfig.page.getNextColumn()).asText();
         }
-        if (operation == null) {
-            operation = NextToken.getOperation(null);
+
+        if (VerifyUtils.isEmpty(value)) {
+            throw new RuntimeException("nextToken value is null");
         }
-        String nextToken = column + "_" + operation + "_" + value + "_" + Optional.ofNullable(pageSize)
-            .orElse(PageInfo.defaultPageSize);
+
+        String tokenColumn = this.column;
+        if (VerifyUtils.isNotEmpty(this.table)) {
+            tokenColumn = table + "." + tokenColumn;
+        }
+
+        String nextToken =
+            tokenColumn + separator + this.operation + separator + this.value + separator + this.pageSize;
         return Base64.getEncoder().encodeToString(nextToken.getBytes());
     }
-
 }

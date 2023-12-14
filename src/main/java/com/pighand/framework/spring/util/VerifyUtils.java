@@ -1,14 +1,16 @@
 package com.pighand.framework.spring.util;
 
 import com.pighand.framework.spring.exception.ThrowPrompt;
-
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,19 +33,23 @@ public class VerifyUtils {
         }
 
         // 字符串类型，并且值是null或空
-        boolean isStringNull = obj instanceof String && "".equals(((String) obj).trim());
+        boolean isStringNull = obj instanceof String && "".equals(((String)obj).trim());
 
         if (isStringNull) {
             return true;
+        } else if (obj instanceof Long) {
+            return ((Long)obj) <= 0;
+        } else if (obj instanceof Integer) {
+            return ((Long)obj) <= 0;
         } else if (obj instanceof CharSequence) {
-            return ((CharSequence) obj).length() == 0;
+            return ((CharSequence)obj).length() == 0;
         } else if (obj instanceof Collection) {
-            if (((Collection<?>) obj).isEmpty()) {
+            if (((Collection<?>)obj).isEmpty()) {
                 return true;
             } else {
                 boolean isNotColEmpty = false;
 
-                for (Object colObj : (Collection<?>) obj) {
+                for (Object colObj : (Collection<?>)obj) {
                     if (!isEmpty(colObj)) {
                         isNotColEmpty = true;
                         break;
@@ -53,7 +59,7 @@ public class VerifyUtils {
                 return !isNotColEmpty;
             }
         } else if (obj instanceof Map) {
-            return ((Map<?, ?>) obj).isEmpty();
+            return ((Map<?, ?>)obj).isEmpty();
         } else if (obj.getClass().isArray()) {
             return Array.getLength(obj) == 0;
         }
@@ -78,7 +84,7 @@ public class VerifyUtils {
      */
     public static Boolean isIp4(String ipString) {
         String regex =
-                "\\b((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\b";
+            "\\b((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\b";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(ipString);
         return matcher.matches();
@@ -119,8 +125,7 @@ public class VerifyUtils {
      * @param voObject
      * @param isErrorString 错误信息以字符串形式返回，否则已map形式返回
      */
-    public static void validateParams(
-            Object voObject, boolean isErrorString, Class<?>... groupClass) {
+    public static void validateParams(Object voObject, boolean isErrorString, Class<?>... groupClass) {
         Set<ConstraintViolation<Object>> violations = getViolations(voObject, groupClass);
 
         if (isErrorString) {
@@ -144,12 +149,11 @@ public class VerifyUtils {
      */
     private static Map<String, String> violationToMap(Set<ConstraintViolation<Object>> violations) {
         Map<String, String> failMessages = new HashMap<>(violations.size());
-        violations.forEach(
-                violation -> {
-                    String propertyName = violation.getPropertyPath().toString();
+        violations.forEach(violation -> {
+            String propertyName = violation.getPropertyPath().toString();
 
-                    failMessages.put(propertyName, violation.getMessage());
-                });
+            failMessages.put(propertyName, violation.getMessage());
+        });
 
         if (failMessages.size() > 0) {
             return failMessages;
@@ -166,12 +170,11 @@ public class VerifyUtils {
      */
     private static String violationToString(Set<ConstraintViolation<Object>> violations) {
         StringBuilder sb = new StringBuilder();
-        violations.forEach(
-                violation -> {
-                    String propertyName = violation.getPropertyPath().toString();
+        violations.forEach(violation -> {
+            String propertyName = violation.getPropertyPath().toString();
 
-                    sb.append(propertyName).append(violation.getMessage()).append("; ");
-                });
+            sb.append(propertyName).append(violation.getMessage()).append("; ");
+        });
 
         if (!sb.isEmpty()) {
             return sb.toString();
@@ -187,8 +190,7 @@ public class VerifyUtils {
      * @param groupClass
      * @return
      */
-    private static Set<ConstraintViolation<Object>> getViolations(
-            Object voObject, Class<?>... groupClass) {
+    private static Set<ConstraintViolation<Object>> getViolations(Object voObject, Class<?>... groupClass) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         return validator.validate(voObject, groupClass);

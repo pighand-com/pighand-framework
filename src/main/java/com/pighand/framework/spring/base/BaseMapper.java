@@ -1,10 +1,7 @@
 package com.pighand.framework.spring.base;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
-import com.pighand.framework.spring.PighandFrameworkConfig;
 import com.pighand.framework.spring.page.NextToken;
 import com.pighand.framework.spring.page.PageInfo;
 import com.pighand.framework.spring.page.PageOrList;
@@ -104,16 +101,18 @@ public interface BaseMapper<T extends BaseDomain> extends com.mybatisflex.core.B
             if (VerifyUtils.isNotEmpty(pageInfo.getNextToken())) {
                 NextToken nextToken = NextToken.decode(pageInfo.getNextToken());
                 if (nextToken.getOperation().equals("0")) {
-                    queryWrapper.le(nextToken.getColumn(), nextToken.getValue());
+                    queryWrapper.ge(nextToken.getFullColumn(), nextToken.getValue());
                 } else {
-                    queryWrapper.ge(nextToken.getColumn(), nextToken.getValue());
+                    queryWrapper.le(nextToken.getFullColumn(), nextToken.getValue());
                 }
+
             }
 
+            Long pageSize = pageInfo.getPageSize();
+            Long nextPageSize = pageSize + 1;
+
             // init page params by nextToken
-            pageInfo.setPageNumber(1L);
-            pageInfo.setPageSize(pageInfo.getPageSize() + 1);
-            pageInfo.setTotalRow(1L);
+            pageInfo.setPageSize(nextPageSize);
 
             Page page;
             if (asType != null) {
@@ -129,16 +128,13 @@ public interface BaseMapper<T extends BaseDomain> extends com.mybatisflex.core.B
             boolean hasMore = page.getRecords().size() >= pageInfo.getPageSize();
             if (hasMore) {
                 Object lastRecords = pageRecords.get(pageRecords.size() - 1);
-                ObjectMapper objectMapper = new ObjectMapper();
-                ObjectNode node = objectMapper.valueToTree(lastRecords);
-                String queryValue = node.get(PighandFrameworkConfig.page.getNextColumn()).asText();
 
-                newNextToken = NextToken.encode(queryValue);
+                newNextToken = pageInfo.getNextTokenDecode().encode(lastRecords);
 
                 pageRecords.remove(page.getRecords().size() - 1);
             }
 
-            pageOrList = new PageOrList(pageRecords, newNextToken);
+            pageOrList = new PageOrList(pageRecords, newNextToken, pageSize);
         } else {
             throw new RuntimeException("分页类型错误");
         }

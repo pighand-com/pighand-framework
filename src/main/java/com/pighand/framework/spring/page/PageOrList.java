@@ -1,6 +1,5 @@
 package com.pighand.framework.spring.page;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mybatisflex.core.paginate.Page;
 import lombok.Data;
 
@@ -14,9 +13,7 @@ import java.util.List;
  * @author wangshuli
  */
 @Data
-@JsonIgnoreProperties({"pageType", "pageToken", "nextColumn", "nextValue", "total", "size", "current", "pages",
-    "orders", "optimizeCountSql", "searchCount", "countId", "maxLimit"})
-public class PageOrList<T> extends Page<T> {
+public class PageOrList<T> {
 
     private List<T> records = Collections.emptyList();
 
@@ -34,8 +31,10 @@ public class PageOrList<T> extends Page<T> {
         this.page = new PageInfo(page.getTotalRow(), page.getTotalPage(), page.getPageSize(), page.getPageNumber());
     }
 
-    public PageOrList(List<T> records, String nextToken) {
+    public PageOrList(List<T> records, String nextToken, Long pageSize) {
         this.records = records;
+
         this.page = new PageInfo(nextToken);
+        this.page.setPageSize(pageSize);
     }
 }

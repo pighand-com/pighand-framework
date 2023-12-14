@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"pageType", "totalRow", "totalPage", "pageSize", "pageNumber", "nextToken"})
+@JsonIgnoreProperties({"nextTokenTable"})
 public class PageInfo {
 
     public static Long defaultPageNumber = 1L;
@@ -58,6 +58,12 @@ public class PageInfo {
     @Column(ignore = true)
     private String nextToken;
 
+    /**
+     * nextToken解析后的对象(token模式)
+     */
+    @Column(ignore = true)
+    private NextToken nextTokenDecode;
+
     public PageInfo(Long totalRow, Long totalPage, Long pageSize, Long pageNumber) {
         this.totalRow = totalRow;
         this.totalPage = totalPage;
@@ -73,20 +79,28 @@ public class PageInfo {
         this.pageType = PageType.NEXT_TOKEN;
     }
 
+    public void setPageType(PageType pageType) {
+        this.pageType = pageType;
+
+        if (this.pageType.equals(PageType.NEXT_TOKEN) && this.nextTokenDecode == null) {
+            this.nextTokenDecode = new NextToken();
+        }
+    }
+
     /**
      * 根据分页参数，判断分页类型，并初始化参数
      * <p>List：不分页
      * <p>Page：分页。如果没有设置pageNumber，默认为1；如果没有设置pageSize，默认为10
-     * <p>NextToken：下页token。如果没有设置pageSize，默认为10。没有nextToken从头开始查
+     * <p>NextToken：下页token。如果没有设置pageSize，默认为10。没有nextToken从头开始查。pageSize优先级：接口传的 > token解析的 > 默认值
      */
     public void init() {
         if (pageType == null) {
             this.pageType = PageType.AUTO;
         }
 
-        boolean noPageSize = this.pageSize == null || this.pageSize.equals(0L);
-        boolean noPageNumber = this.pageNumber == null || this.pageNumber.equals(0L);
-        boolean noNextToken = this.nextToken == null || "".equals(this.nextToken);
+        boolean noPageSize = VerifyUtils.isEmpty(this.pageSize);
+        boolean noPageNumber = VerifyUtils.isEmpty(this.pageNumber);
+        boolean noNextToken = VerifyUtils.isEmpty(this.nextToken);
 
         // set pageType in auto
         if (this.pageType.equals(PageType.AUTO)) {
@@ -119,14 +133,22 @@ public class PageInfo {
         }
 
         if (pageType.equals(PageType.NEXT_TOKEN)) {
-            if (VerifyUtils.isNotEmpty(this.nextToken) && noPageSize) {
-                NextToken nextTokenInfo = NextToken.decode(nextToken);
-                this.pageSize = nextTokenInfo.getPageSize();
+            if (VerifyUtils.isNotEmpty(this.nextToken)) {
+                this.nextTokenDecode = NextToken.decode(this.nextToken);
+
             }
 
+            // 优先使用传过来的pageSize
             if (noPageSize) {
-                this.pageSize = PageInfo.defaultPageSize;
+                this.pageSize = this.nextTokenDecode.getPageSize();
+            } else {
+                this.nextTokenDecode.setPageSize(this.pageSize);
             }
+
+            // totalRow = 1取消查总数；pageSize由逻辑方法设置，减少token二次解析
+            this.pageNumber = 1L;
+            this.totalRow = 1L;
+
         }
     }
 
