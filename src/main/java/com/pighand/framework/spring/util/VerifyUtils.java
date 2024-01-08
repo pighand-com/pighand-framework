@@ -40,7 +40,7 @@ public class VerifyUtils {
         } else if (obj instanceof Long) {
             return ((Long)obj) <= 0;
         } else if (obj instanceof Integer) {
-            return ((Long)obj) <= 0;
+            return ((Integer)obj) <= 0;
         } else if (obj instanceof CharSequence) {
             return ((CharSequence)obj).length() == 0;
         } else if (obj instanceof Collection) {
