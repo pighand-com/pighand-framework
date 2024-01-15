@@ -13,7 +13,8 @@ import java.util.List;
  * @author wangshuli
  */
 @Data
-@JsonIgnoreProperties({"joinTables"})
+@JsonIgnoreProperties({"joinTables", "pageType", "totalRow", "totalPage", "pageSize", "pageNumber", "nextToken",
+    "nextTokenDecode"})
 public class BaseDomain extends PageInfo {
     /**
      * 查询关联表
