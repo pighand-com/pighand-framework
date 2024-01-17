@@ -3,13 +3,10 @@ package com.pighand.framework.spring.exception;
 import com.pighand.framework.spring.PighandFrameworkConfig;
 import com.pighand.framework.spring.response.Result;
 import com.pighand.framework.spring.util.VerifyUtils;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolationException;
-
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.util.StringUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,47 +26,33 @@ public class ExceptionHandle {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public Object javaException(
-            HttpServletRequest request, HttpServletResponse response, Exception ex) {
-        if (ex instanceof MethodArgumentNotValidException) {
+    public Object javaException(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        if (ex instanceof MethodArgumentNotValidException validException) {
             // 处理@Validated异常
-            MethodArgumentNotValidException validException = (MethodArgumentNotValidException) ex;
             FieldError fieldError = validException.getFieldError();
 
             String validMessage = fieldError.getField() + " " + fieldError.getDefaultMessage();
 
-            return getExceptionResult(
-                    new ThrowPrompt(validMessage), ExceptionEnum.PROMPT, response);
-        } else if (ex instanceof ConstraintViolationException) {
+            return getExceptionResult(new ThrowPrompt(validMessage), ExceptionEnum.PROMPT, response);
+        } else if (ex instanceof ConstraintViolationException validException) {
             // url参数、数组类参数校验报错类
-            ConstraintViolationException validException = (ConstraintViolationException) ex;
 
-            return getExceptionResult(
-                    new ThrowPrompt(validException.getMessage()), ExceptionEnum.PROMPT, response);
+            return getExceptionResult(new ThrowPrompt(validException.getMessage()), ExceptionEnum.PROMPT, response);
         } else if (PighandFrameworkConfig.exception.isInterceptException()) {
             // 拦截系统异常
-            this.privateErrorStack(
-                    null, ex.getMessage(), ex.getStackTrace(), ExceptionEnum.EXCEPTION);
-
             String overallErrorMessage = PighandFrameworkConfig.exception.getMessage();
             String exMessage = ex.getMessage();
 
             if (ex instanceof WebClientResponseException) {
-                exMessage +=
-                        ", body: "
-                                + ((WebClientResponseException.BadRequest) ex)
-                                        .getResponseBodyAsString();
+                exMessage += ", body: " + ((WebClientResponseException.BadRequest)ex).getResponseBodyAsString();
             }
 
-            String message =
-                    StringUtils.hasText(overallErrorMessage) ? overallErrorMessage : exMessage;
+            String message = StringUtils.hasText(overallErrorMessage) ? overallErrorMessage : exMessage;
 
-            return getExceptionResult(
-                    new ThrowException(message), ExceptionEnum.EXCEPTION, response);
+            return getExceptionResult(new ThrowException(message), ExceptionEnum.EXCEPTION, response);
         } else {
             // 其他系统异常，直接返回
-            this.privateErrorStack(
-                    null, ex.getMessage(), ex.getStackTrace(), ExceptionEnum.EXCEPTION);
+            this.privateErrorStack(null, ex.getMessage(), ex.getStackTrace(), ExceptionEnum.EXCEPTION);
 
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return ex.getMessage();
@@ -84,9 +67,8 @@ public class ExceptionHandle {
      * @param response
      * @return
      */
-    private Result getExceptionResult(
-            Exception ex, ExceptionEnum type, HttpServletResponse response) {
-        ThrowInterface throwInfo = (ThrowInterface) ex;
+    private Result getExceptionResult(Exception ex, ExceptionEnum type, HttpServletResponse response) {
+        ThrowInterface throwInfo = (ThrowInterface)ex;
 
         String error = throwInfo.getError();
         Integer code = throwInfo.getCode();
@@ -126,7 +108,7 @@ public class ExceptionHandle {
 
         // 日志
         if (isLog) {
-            this.privateErrorStack(code, error, ex.getStackTrace(), ExceptionEnum.PROMPT);
+            this.privateErrorStack(code, error, ex.getStackTrace(), type);
         }
 
         return new Result(code, data, error);
@@ -135,9 +117,9 @@ public class ExceptionHandle {
     /**
      * 错误处理
      *
-     * @param request request
+     * @param request  request
      * @param response response
-     * @param ex ex
+     * @param ex       ex
      * @return Result
      */
     @ExceptionHandler(ThrowPrompt.class)
@@ -149,38 +131,33 @@ public class ExceptionHandle {
     /**
      * 异常处理
      *
-     * @param request request
+     * @param request  request
      * @param response response
-     * @param ex ex
+     * @param ex       ex
      * @return Result
      */
     @ExceptionHandler(ThrowException.class)
     @ResponseBody
-    public Result exception(
-            HttpServletRequest request, HttpServletResponse response, Exception ex) {
+    public Result exception(HttpServletRequest request, HttpServletResponse response, Exception ex) {
         return this.getExceptionResult(ex, ExceptionEnum.EXCEPTION, response);
     }
 
     /**
      * 打印异常日志
      *
-     * @param code error code
+     * @param code    error code
      * @param message error message
-     * @param stacks exception stacks
+     * @param stacks  exception stacks
      */
-    private void privateErrorStack(
-            Integer code, String message, StackTraceElement[] stacks, ExceptionEnum exceptionEnum) {
+    private void privateErrorStack(Integer code, String message, StackTraceElement[] stacks,
+        ExceptionEnum exceptionEnum) {
         StringBuilder exMsg = new StringBuilder();
 
         if (VerifyUtils.isNotEmpty(code)) {
             exMsg.append("\nCode:").append(code);
         }
 
-        exMsg.append("\n")
-                .append("Exception:\n\t")
-                .append(message)
-                .append("\n")
-                .append("Stacks:\n");
+        exMsg.append("\n").append("Exception:\n\t").append(message).append("\n").append("Stacks:\n");
 
         for (StackTraceElement stack : stacks) {
             exMsg.append("\t").append(stack).append("\n");
