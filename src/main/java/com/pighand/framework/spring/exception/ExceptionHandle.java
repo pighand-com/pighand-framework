@@ -33,23 +33,21 @@ public class ExceptionHandle {
 
             String validMessage = fieldError.getField() + " " + fieldError.getDefaultMessage();
 
-            return getExceptionResult(new ThrowPrompt(validMessage), ExceptionEnum.PROMPT, response);
+            return getExceptionResult(ex.getMessage(), new ThrowPrompt(validMessage), ExceptionEnum.PROMPT, response);
         } else if (ex instanceof ConstraintViolationException validException) {
             // url参数、数组类参数校验报错类
 
-            return getExceptionResult(new ThrowPrompt(validException.getMessage()), ExceptionEnum.PROMPT, response);
+            return getExceptionResult(ex.getMessage(), new ThrowPrompt(validException.getMessage()),
+                ExceptionEnum.PROMPT, response);
         } else if (PighandFrameworkConfig.exception.isInterceptException()) {
             // 拦截系统异常
-            String overallErrorMessage = PighandFrameworkConfig.exception.getMessage();
-            String exMessage = ex.getMessage();
+            String error = ex.getMessage();
 
             if (ex instanceof WebClientResponseException) {
-                exMessage += ", body: " + ((WebClientResponseException.BadRequest)ex).getResponseBodyAsString();
+                error += ", body: " + ((WebClientResponseException.BadRequest)ex).getResponseBodyAsString();
             }
 
-            String message = StringUtils.hasText(overallErrorMessage) ? overallErrorMessage : exMessage;
-
-            return getExceptionResult(new ThrowException(message), ExceptionEnum.EXCEPTION, response);
+            return getExceptionResult(error, ex, ExceptionEnum.EXCEPTION, response);
         } else {
             // 其他系统异常，直接返回
             this.privateErrorStack(null, ex.getMessage(), ex.getStackTrace(), ExceptionEnum.EXCEPTION);
@@ -62,56 +60,52 @@ public class ExceptionHandle {
     /**
      * 异常返回值
      *
+     * @param responseError
      * @param ex
      * @param type
      * @param response
      * @return
      */
-    private Result getExceptionResult(Exception ex, ExceptionEnum type, HttpServletResponse response) {
-        ThrowInterface throwInfo = (ThrowInterface)ex;
+    private Result getExceptionResult(String responseError, Exception ex, ExceptionEnum type,
+        HttpServletResponse response) {
 
-        String error = throwInfo.getError();
-        Integer code = throwInfo.getCode();
-        Object data = throwInfo.getData();
+        Integer code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+        Object data = null;
 
-        // 处理空指针
-        if (VerifyUtils.isEmpty(error)) {
-            error = "java.lang.NullPointerException";
+        if (ex instanceof ThrowInterface throwInfo) {
+            code = throwInfo.getCode();
+            data = throwInfo.getData();
+
+            if (VerifyUtils.isEmpty(responseError)) {
+                responseError = throwInfo.getError();
+            }
+        } else if (VerifyUtils.isEmpty(responseError)) {
+            responseError = ex.getMessage();
         }
 
-        int defaultHttpStatus = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+        if (type.equals(ExceptionEnum.EXCEPTION)) {
+            String overallErrorMessage = PighandFrameworkConfig.exception.getMessage();
 
-        // 是否打印日志
-        Boolean isLog = false;
-
-        if (type.equals(ExceptionEnum.PROMPT)) {
-            // 提示
-            defaultHttpStatus = HttpServletResponse.SC_BAD_REQUEST;
-
-            if (true) {
-                isLog = true;
+            if (StringUtils.hasText(overallErrorMessage)) {
+                responseError = overallErrorMessage;
             }
-        } else {
-            // 异常
-            isLog = true;
+        }
 
-            // 全局异常信息
-            String returnErrorMessage = PighandFrameworkConfig.exception.getMessage();
-            if (VerifyUtils.isNotEmpty(returnErrorMessage)) {
-                error = returnErrorMessage;
-            }
+        // 处理空指针
+        if (VerifyUtils.isEmpty(responseError)) {
+            responseError = "java.lang.NullPointerException";
         }
 
         // 设置HTTP状态码
-        int httpStatus = HttpServletResponse.SC_OK;
-        response.setStatus(httpStatus);
+        response.setStatus(HttpServletResponse.SC_OK);
 
-        // 日志
+        // 打印日志
+        Boolean isLog = type.equals(ExceptionEnum.EXCEPTION);
         if (isLog) {
-            this.privateErrorStack(code, error, ex.getStackTrace(), type);
+            this.privateErrorStack(code, responseError, ex.getStackTrace(), type);
         }
 
-        return new Result(code, data, error);
+        return new Result(code, data, responseError);
     }
 
     /**
@@ -125,7 +119,7 @@ public class ExceptionHandle {
     @ExceptionHandler(ThrowPrompt.class)
     @ResponseBody
     public Result prompt(HttpServletRequest request, HttpServletResponse response, Exception ex) {
-        return this.getExceptionResult(ex, ExceptionEnum.PROMPT, response);
+        return this.getExceptionResult(ex.getMessage(), ex, ExceptionEnum.PROMPT, response);
     }
 
     /**
@@ -139,7 +133,7 @@ public class ExceptionHandle {
     @ExceptionHandler(ThrowException.class)
     @ResponseBody
     public Result exception(HttpServletRequest request, HttpServletResponse response, Exception ex) {
-        return this.getExceptionResult(ex, ExceptionEnum.EXCEPTION, response);
+        return this.getExceptionResult(ex.getMessage(), ex, ExceptionEnum.EXCEPTION, response);
     }
 
     /**
