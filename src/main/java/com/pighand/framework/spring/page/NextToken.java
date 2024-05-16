@@ -19,8 +19,9 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 public class NextToken {
-
     public final static String separator = "::";
+    
+    ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * token模式，查询字段的所属表。sql的from中存在多个表或别名，需要传此参数
@@ -128,7 +129,6 @@ public class NextToken {
      */
     public String encode(Object includeValueObject) {
         if (includeValueObject != null) {
-            ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode node = objectMapper.valueToTree(includeValueObject);
             this.value = node.get(PighandFrameworkConfig.page.getNextColumn()).asText();
         }
