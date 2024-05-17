@@ -1,5 +1,6 @@
 package com.pighand.framework.spring.page;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.pighand.framework.spring.PighandFrameworkConfig;
@@ -20,7 +21,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class NextToken {
     public final static String separator = "::";
-    
+
+    @JsonIgnore
     ObjectMapper objectMapper = new ObjectMapper();
 
     /**
