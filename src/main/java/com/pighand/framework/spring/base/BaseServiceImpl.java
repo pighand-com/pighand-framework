@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author wangshuli
  */
-public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseDomain> extends ServiceImpl<M, T>
+public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T>
     implements BaseService<T> {
 
     @Autowired(required = false)

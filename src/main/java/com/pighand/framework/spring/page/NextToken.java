@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.pighand.framework.spring.PighandFrameworkConfig;
+import com.pighand.framework.spring.base.BaseModel;
 import com.pighand.framework.spring.util.VerifyUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -58,7 +59,7 @@ public class NextToken {
     public NextToken() {
         this.column = PighandFrameworkConfig.page.getNextColumn();
         this.operation = NextToken.getOperation(null);
-        this.pageSize = PageInfo.defaultPageSize;
+        this.pageSize = BaseModel.defaultPageSize;
     }
 
     /**
@@ -81,7 +82,7 @@ public class NextToken {
 
         String fullColumn = VerifyUtils.isNotEmpty(table) ? table + "." + column : column;
 
-        Long pageSize = PageInfo.defaultPageSize;
+        Long pageSize = BaseModel.defaultPageSize;
         if (nextTokenDecodes.length > 3) {
             pageSize = Long.parseLong(nextTokenDecodes[3]);
         }

@@ -7,6 +7,6 @@ import com.mybatisflex.core.service.IService;
  *
  * @author wangshuli
  */
-public interface BaseService<T extends BaseDomain> extends IService<T> {
+public interface BaseService<T extends BaseModel> extends IService<T> {
 
 }

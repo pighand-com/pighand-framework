@@ -1,8 +1,11 @@
-package com.pighand.framework.spring.page;
+package com.pighand.framework.spring.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mybatisflex.annotation.Column;
+import com.mybatisflex.core.activerecord.Model;
 import com.mybatisflex.core.paginate.Page;
+import com.pighand.framework.spring.page.NextToken;
+import com.pighand.framework.spring.page.PageType;
 import com.pighand.framework.spring.util.VerifyUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"nextTokenTable"})
-public class PageInfo {
+public class BaseModel<T extends Model<T>> extends Model<T> {
 
     public static Long defaultPageNumber = 1L;
     public static Long defaultPageSize = 10L;
@@ -64,7 +67,7 @@ public class PageInfo {
     @Column(ignore = true)
     private NextToken nextTokenDecode;
 
-    public PageInfo(Long totalRow, Long totalPage, Long pageSize, Long pageNumber) {
+    public BaseModel(Long totalRow, Long totalPage, Long pageSize, Long pageNumber) {
         this.totalRow = totalRow;
         this.totalPage = totalPage;
         this.pageSize = pageSize;
@@ -73,7 +76,7 @@ public class PageInfo {
         this.pageType = PageType.PAGE;
     }
 
-    public PageInfo(String nextToken) {
+    public BaseModel(String nextToken) {
         this.nextToken = nextToken;
 
         this.pageType = PageType.NEXT_TOKEN;
@@ -122,11 +125,11 @@ public class PageInfo {
 
         if (this.pageType.equals(PageType.PAGE)) {
             if (noPageNumber) {
-                this.pageNumber = PageInfo.defaultPageNumber;
+                this.pageNumber = BaseModel.defaultPageNumber;
             }
 
             if (noPageSize) {
-                this.pageSize = PageInfo.defaultPageSize;
+                this.pageSize = BaseModel.defaultPageSize;
             }
 
             return;

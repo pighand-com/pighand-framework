@@ -1,6 +1,7 @@
 package com.pighand.framework.spring.page;
 
 import com.mybatisflex.core.paginate.Page;
+import com.pighand.framework.spring.base.BaseModel;
 import lombok.Data;
 
 import java.util.Collections;
@@ -20,7 +21,7 @@ public class PageOrList<T> {
     /**
      * 分页信息
      */
-    private PageInfo page;
+    private BaseModel page;
 
     public PageOrList(List<T> records) {
         this.records = records;
@@ -28,13 +29,13 @@ public class PageOrList<T> {
 
     public PageOrList(Page page) {
         this.records = page.getRecords();
-        this.page = new PageInfo(page.getTotalRow(), page.getTotalPage(), page.getPageSize(), page.getPageNumber());
+        this.page = new BaseModel(page.getTotalRow(), page.getTotalPage(), page.getPageSize(), page.getPageNumber());
     }
 
     public PageOrList(List<T> records, String nextToken, Long pageSize) {
         this.records = records;
 
-        this.page = new PageInfo(nextToken);
+        this.page = new BaseModel(nextToken);
         this.page.setPageSize(pageSize);
     }
 }
