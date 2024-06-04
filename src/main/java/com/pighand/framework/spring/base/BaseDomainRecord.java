@@ -5,7 +5,7 @@ import com.mybatisflex.annotation.Column;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * domain 基础父类
@@ -23,17 +23,17 @@ public class BaseDomainRecord<T extends BaseDomainRecord<T>> extends BaseModel<T
      * 查询关联表
      */
     @Column(ignore = true)
-    private List<String> joinTables;
+    private Set<String> joinTables;
 
     public BaseDomainRecord() {
         super();
     }
 
     public void setJoinTables(String... joinTables) {
-        this.joinTables = List.of(joinTables);
+        this.joinTables = Set.of(joinTables);
     }
 
-    public void setJoinTables(List<String> joinTables) {
+    public void setJoinTables(Set<String> joinTables) {
         this.joinTables = joinTables;
     }
 }

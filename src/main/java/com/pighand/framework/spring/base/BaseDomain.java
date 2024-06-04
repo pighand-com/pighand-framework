@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mybatisflex.annotation.Column;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * domain 基础父类
@@ -19,13 +21,13 @@ public class BaseDomain extends BaseModel {
      * 查询关联表
      */
     @Column(ignore = true)
-    private List<String> joinTables;
+    private Set<String> joinTables;
 
     public void setJoinTables(String... joinTables) {
-        this.joinTables = List.of(joinTables);
+        this.joinTables = Stream.of(joinTables).collect(Collectors.toSet());
     }
 
-    public void setJoinTables(List<String> joinTables) {
+    public void setJoinTables(Set<String> joinTables) {
         this.joinTables = joinTables;
     }
 }
