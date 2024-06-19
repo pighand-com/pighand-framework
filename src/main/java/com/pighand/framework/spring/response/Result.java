@@ -27,7 +27,9 @@ public class Result<T> extends ResultData<T> {
         this.success(returnObj);
     }
 
-    /** 成功 */
+    /**
+     * 成功
+     */
     public Result<T> success() {
         super.setResultData(this.successCode, null, null);
         return this;
@@ -48,7 +50,7 @@ public class Result<T> extends ResultData<T> {
      * 成功
      *
      * @param returnObj return object
-     * @param code custom code
+     * @param code      custom code
      * @return success object
      */
     public Result<T> success(T returnObj, Integer code) {

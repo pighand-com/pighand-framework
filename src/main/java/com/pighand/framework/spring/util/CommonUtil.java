@@ -19,33 +19,21 @@ public class CommonUtil {
      * @return IP
      */
     public static String getIp(HttpServletRequest request) {
-        String unknown = "unknown";
-        String ip = request.getHeader("X-Real-IP");
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("x-forwarded-for");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
+        String[] headers = {"X-Real-IP", "x-forwarded-for", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP",
+            "HTTP_X_FORWARDED_FOR"};
+
+        for (String header : headers) {
+            String ip = request.getHeader(header);
+            if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+                // 处理x-forwarded-for可能包含多个IP地址的情况
+                if (ip.contains(",")) {
+                    ip = ip.split(",")[0].trim(); // 取第一个非私有IP地址
+                }
+                return ip;
+            }
         }
 
-        // 如果是多级代理取第一个IP地址
-        String multilevelFlag = ",";
-        if (ip != null && ip.indexOf(multilevelFlag) != -1) {
-            ip = ip.substring(ip.lastIndexOf(",") + 1, ip.length()).trim();
-        }
-        return ip;
+        return request.getRemoteAddr();
     }
 
     /**
@@ -61,7 +49,7 @@ public class CommonUtil {
     /**
      * 设置class的默认值
      *
-     * @param clz 要设置值得class
+     * @param clz           要设置值得class
      * @param genericityClz List类型的泛型
      * @return
      */
@@ -72,24 +60,17 @@ public class CommonUtil {
             return "Object";
         } else if (clzName.equals(String.class.getName())) {
             return "String";
-        } else if (clzName.equals(Boolean.class.getName())
-                || boolean.class.getName().equals(clzName)) {
+        } else if (clzName.equals(Boolean.class.getName()) || boolean.class.getName().equals(clzName)) {
             return true;
-        } else if (clzName.equals(Byte.class.getName())
-                || clzName.equals(Short.class.getName())
-                || clzName.equals(Integer.class.getName())
-                || clzName.equals(Long.class.getName())
-                || byte.class.getName().equals(clzName)
-                || short.class.getName().equals(clzName)
-                || int.class.getName().equals(clzName)
-                || long.class.getName().equals(clzName)) {
+        } else if (clzName.equals(Byte.class.getName()) || clzName.equals(Short.class.getName()) || clzName.equals(
+            Integer.class.getName()) || clzName.equals(Long.class.getName()) || byte.class.getName().equals(clzName)
+            || short.class.getName().equals(clzName) || int.class.getName().equals(clzName) || long.class.getName()
+            .equals(clzName)) {
             return 0;
-        } else if (clzName.equals(Float.class.getName())
-                || clzName.equals(Double.class.getName())) {
+        } else if (clzName.equals(Float.class.getName()) || clzName.equals(Double.class.getName())) {
             return 0.0;
-        } else if (clzName.equals(List.class.getName())
-                || clzName.equals(ArrayList.class.getName())
-                || clzName.equals(Set.class.getName())) {
+        } else if (clzName.equals(List.class.getName()) || clzName.equals(ArrayList.class.getName()) || clzName.equals(
+            Set.class.getName())) {
             List<Object> list = new ArrayList<>();
             if (null != genericityClz) {
                 list.add(setDefValue(genericityClz, null));
