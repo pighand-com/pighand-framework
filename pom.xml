@@ -47,7 +47,6 @@
         <spring-boot.version>3.3.1</spring-boot.version>
         <mybatis-flex.version>1.9.2</mybatis-flex.version>
         <protobuf-java.version>3.22.2</protobuf-java.version>
-        <reactor-netty-http.version>1.1.21</reactor-netty-http.version>
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
         <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
         <spring-boot-configuration-processor.version>3.2.7</spring-boot-configuration-processor.version>
@@ -135,11 +134,6 @@
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
             <version>${jakarta.validation-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.projectreactor.netty</groupId>
-            <artifactId>reactor-netty-http</artifactId>
-            <version>${reactor-netty-http.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
