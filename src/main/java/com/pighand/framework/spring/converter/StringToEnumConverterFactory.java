@@ -1,10 +1,10 @@
 package com.pighand.framework.spring.converter;
 
-import com.google.common.collect.Maps;
 import com.pighand.framework.spring.base.BaseEnum;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,7 +13,7 @@ import java.util.Map;
  * add {@code registry.addConverterFactory(new StringToEnumConverterFactory());} to WebMvcConfig
  */
 public class StringToEnumConverterFactory implements ConverterFactory<String, BaseEnum> {
-    private static final Map<Class, Converter> CONVERTERS = Maps.newHashMap();
+    private static final Map<Class, Converter> CONVERTERS = new HashMap<>();
 
     /**
      * 获取一个从 String 转化为 T 的转换器，T 是一个泛型，有多个实现

@@ -1,10 +1,10 @@
 package com.pighand.framework.spring.converter;
 
-import com.google.common.collect.Maps;
 import com.pighand.framework.spring.base.BaseEnum;
 import com.pighand.framework.spring.util.VerifyUtils;
 import org.springframework.core.convert.converter.Converter;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ import java.util.Objects;
  * @param <T>
  */
 public class StringToEnumConverter<T extends BaseEnum> implements Converter<String, T> {
-    private final Map<String, T> enumMap = Maps.newHashMap();
+    private final Map<String, T> enumMap = new HashMap<>();
 
     public StringToEnumConverter(Class<T> enumType) {
         T[] enums = enumType.getEnumConstants();

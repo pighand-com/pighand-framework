@@ -43,13 +43,11 @@
         <lombok.version>1.18.34</lombok.version>
         <jackson.version>2.17.2</jackson.version>
         <sl4j-api.version>2.0.12</sl4j-api.version>
-        <grpc-stub.version>1.64.0</grpc-stub.version>
-        <spring-boot.version>3.3.1</spring-boot.version>
-        <mybatis-flex.version>1.9.2</mybatis-flex.version>
-        <protobuf-java.version>3.22.2</protobuf-java.version>
+        <spring-boot.version>3.3.2</spring-boot.version>
+        <mybatis-flex.version>1.9.4</mybatis-flex.version>
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
         <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
-        <spring-boot-configuration-processor.version>3.2.7</spring-boot-configuration-processor.version>
+        <spring-boot-configuration-processor.version>3.3.2</spring-boot-configuration-processor.version>
 
         <!-- plugins -->
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
@@ -134,16 +132,6 @@
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
             <version>${jakarta.validation-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-            <version>${protobuf-java.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-stub</artifactId>
-            <version>${grpc-stub.version}</version>
         </dependency>
     </dependencies>
 
