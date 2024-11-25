@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * domain 基础父类
@@ -30,7 +32,7 @@ public class BaseDomainRecord<T extends BaseDomainRecord<T>> extends BaseModel<T
     }
 
     public void setJoinTables(String... joinTables) {
-        this.joinTables = Set.of(joinTables);
+        this.joinTables = Stream.of(joinTables).collect(Collectors.toSet());
     }
 
     public void setJoinTables(Set<String> joinTables) {
