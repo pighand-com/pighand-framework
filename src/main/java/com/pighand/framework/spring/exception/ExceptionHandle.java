@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.FieldError;
@@ -34,15 +35,23 @@ import java.util.function.Function;
 @Slf4j
 @ControllerAdvice
 public class ExceptionHandle {
+
     public static final MediaType APPLICATION_JSON_UTF8 =
         new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(),
             StandardCharsets.UTF_8);
-
     // 异常返回数据方法
     private static final Map<String, Function<Object, Object>> exceptionDataFunction = new HashMap<>();
     private static final Set<String> exceptionDataFunctionNames = new HashSet<>();
-
     ObjectMapper objectMapper = new ObjectMapper();
+
+    @Value("${access-control-allow.origin}")
+    private String AccessControlAllowOrigin;
+
+    @Value("${access-control-allow.methods}")
+    private String AccessControlAllowMethods;
+
+    @Value("${access-control-allow.headers}")
+    private String AccessControlAllowHeaders;
 
     /**
      * 设置异常返回数据方法
@@ -65,6 +74,10 @@ public class ExceptionHandle {
      */
     public void setResponse(HttpServletRequest request, HttpServletResponse response, Exception ex) throws IOException {
         Object result = this.javaException(request, response, ex);
+
+        response.setHeader("Access-Control-Allow-Origin", AccessControlAllowOrigin);
+        response.setHeader("Access-Control-Allow-Methods", AccessControlAllowMethods);
+        response.setHeader("Access-Control-Allow-Headers", AccessControlAllowHeaders);
 
         response.setContentType(APPLICATION_JSON_UTF8.toString());
         response.getWriter().write(objectMapper.writeValueAsString(result));
