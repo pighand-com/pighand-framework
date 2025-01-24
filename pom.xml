@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pighand</groupId>
     <artifactId>pighand-framework-spring</artifactId>
-    <version>2.0.0-bate.2.20250103</version>
+    <version>2.0.0-bate.2.20250124</version>
 
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
@@ -44,7 +44,7 @@
         <jackson.version>2.17.2</jackson.version>
         <sl4j-api.version>2.0.12</sl4j-api.version>
         <spring-boot.version>3.3.2</spring-boot.version>
-        <mybatis-flex.version>1.9.4</mybatis-flex.version>
+        <mybatis-flex.version>1.10.4</mybatis-flex.version>
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
         <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
         <spring-boot-configuration-processor.version>3.3.2</spring-boot-configuration-processor.version>

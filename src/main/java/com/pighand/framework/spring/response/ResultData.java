@@ -10,16 +10,23 @@ import lombok.Data;
 @Data
 public class ResultData<T> {
 
-    /** 状态码 */
+    /**
+     * 状态码
+     */
     private Integer code;
 
-    /** 返回数据 */
+    /**
+     * 返回数据
+     */
     private T data;
 
-    /** 提示、异常返回消息 */
+    /**
+     * 提示、异常返回消息
+     */
     private String error;
 
-    public ResultData() {}
+    public ResultData() {
+    }
 
     public ResultData(Integer code, T data, String error) {
         this.setResultData(code, data, error);
